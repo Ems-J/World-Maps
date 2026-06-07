@@ -1,0 +1,685 @@
+<head>
+  <title>World Map</title>
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+    body {
+      margin: 0;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100vw;
+      background: black;
+    }
+
+.marker-label {
+  background: rgba(35, 28, 20, 0.95);
+
+  border: 2px solid #8d6b3f;
+  border-radius: 6px;
+
+  color: #f0e6c8;
+
+  font-family: serif;
+  font-size: 14px;
+  font-weight: bold;
+
+  padding: 3px 8px;
+
+  box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+  text-align: center;
+}
+
+/* Removes default white tooltip box */
+.leaflet-tooltip.marker-label {
+  background: rgba(35, 28, 20, 0.95);
+  border: 2px solid #8d6b3f;
+  color: #f0e6c8;
+}
+
+/* Removes the little tooltip arrow */
+.leaflet-tooltip-top.marker-label:before {
+  border-top-color: #8d6b3f;
+
+}
+
+
+#legend {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+
+  z-index: 1000;
+
+  width: 170px;
+
+  padding: 12px;
+
+  background-color: rgba(28, 22, 16, 0.92);
+
+  border: 2px solid #8d6b3f;
+  border-radius: 8px;
+
+  color: #f0e6c8;
+
+  font-family: Georgia, serif;
+
+  box-shadow: 0 0 20px rgba(0,0,0,0.65);
+
+  backdrop-filter: blur(2px);
+}
+
+#legend h2 {
+  margin: 0 0 10px 0;
+
+  color: #d8c08d;
+
+  font-size: 16px;
+  font-weight: bold;
+
+  border-bottom: 1px solid rgba(216,192,141,0.35);
+
+  padding-bottom: 6px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+
+  margin-bottom: 6px;
+
+  font-size: 13px;
+
+  color: #f0e6c8;
+}
+
+.legend-number {
+  width: 18px;
+  height: 18px;
+
+  margin-right: 8px;
+
+  border-radius: 50%;
+
+  background-color: #8d6b3f;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  font-weight: bold;
+
+  color: #fff8e7;
+
+  flex-shrink: 0;
+}
+
+.leaflet-popup-content-wrapper {
+  background: rgba(28, 22, 16, 0.96);
+
+  color: #f0e6c8;
+
+  border: 2px solid #8d6b3f;
+  border-radius: 10px;
+
+  box-shadow: 0 0 20px rgba(0,0,0,0.7);
+
+  font-family: Georgia, serif;
+}
+
+/* Popup text area */
+.leaflet-popup-content {
+  margin: 14px 16px;
+
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+/* Popup title */
+.leaflet-popup-content b {
+  color: #d8c08d;
+
+  font-size: 18px;
+}
+
+/* Links */
+.leaflet-popup-content a {
+  color: #e6c97a;
+
+  text-decoration: none;
+
+  font-weight: bold;
+}
+
+.leaflet-popup-content a:hover {
+  color: #fff1b3;
+
+  text-decoration: underline;
+}
+
+/* Small popup arrow */
+.leaflet-popup-tip {
+  background: rgba(28, 22, 16, 0.96);
+
+  border: 2px solid #8d6b3f;
+}
+
+/* Close button */
+.leaflet-popup-close-button {
+  color: #d8c08d !important;
+
+  padding-right: 6px !important;
+}
+
+.leaflet-popup-close-button:hover {
+  color: white !important;
+}
+
+  </style>
+</head>
+
+<body>
+
+<div id="legend">
+
+  <h2>Kingdoms & Cities</h2>
+
+  <div class="legend-item">
+    <span class="legend-number">1</span>
+    Northaven
+  </div>
+
+  <div class="legend-item">
+    <span class="legend-number">2</span>
+    Cloudtine
+  </div>
+
+  <div class="legend-item">
+    <span class="legend-number">3</span>
+    Wintercourt
+  </div>
+
+  <div class="legend-item">
+    <span class="legend-number">4</span>
+    Khardruun
+  </div>
+<div class="legend-item">
+    <span class="legend-number">5</span>
+    Westfront
+  </div>
+<div class="legend-item">
+    <span class="legend-number">6</span>
+    Spinecrest
+  </div>
+<div class="legend-item">
+    <span class="legend-number">7</span>
+    Ridgeend
+  </div>
+<div class="legend-item">
+    <span class="legend-number">8</span>
+    Wolfport
+  </div>
+<div class="legend-item">
+    <span class="legend-number">9</span>
+    Boltwick
+  </div>
+<div class="legend-item">
+    <span class="legend-number">10</span>
+    Thalan'tir
+  </div>
+<div class="legend-item">
+    <span class="legend-number">11</span>
+    Davorok
+  </div>
+<div class="legend-item">
+    <span class="legend-number">12</span>
+    Sunderwatch
+  </div>
+<div class="legend-item">
+    <span class="legend-number">13</span>
+    Stonehold
+  </div>
+<div class="legend-item">
+    <span class="legend-number">14</span>
+    Gladeforge
+  </div>
+<div class="legend-item">
+    <span class="legend-number">15</span>
+    Hearthwell
+  </div>
+<div class="legend-item">
+    <span class="legend-number">16</span>
+    Coppershore
+  </div>
+<div class="legend-item">
+    <span class="legend-number">17</span>
+    Razamir
+  </div>
+<div class="legend-item">
+    <span class="legend-number">18</span>
+    Dunelight
+  </div>
+<div class="legend-item">
+    <span class="legend-number">19</span>
+    Sunmark Cross
+  </div>
+<div class="legend-item">
+    <span class="legend-number">20</span>
+    Coralspire
+  </div>
+<div class="legend-item">
+    <span class="legend-number">21</span>
+    Spearwind Hold
+  </div>
+<div class="legend-item">
+    <span class="legend-number">22</span>
+    Horizon's Rest
+  </div>
+<div class="legend-item">
+    <span class="legend-number">23</span>
+    Bellorosa
+  </div>
+<div class="legend-item">
+    <span class="legend-number">24</span>
+    Tidefall
+  </div>
+<div class="legend-item">
+    <span class="legend-number">25</span>
+    Saltcrown
+  </div>
+
+
+
+
+
+
+</div>
+
+<div id="map"></div>
+<div id="map"></div>
+
+<!-- Leaflet JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+  // Create map
+  const map = L.map('map', {
+    crs: L.CRS.Simple,
+    minZoom: -1
+  });
+
+  // Image size
+  const bounds = [[0,0], [2288,2349]];
+
+  // Add your image
+  const image = L.imageOverlay('map.jpg', bounds).addTo(map);
+
+  // Fit map to screen
+  map.fitBounds(bounds);
+
+const shieldIcon = L.icon({
+  iconUrl: 'shield.png',
+
+  iconSize: [20, 20],
+
+  iconAnchor: [10, 20],
+
+  popupAnchor: [0, -20]
+});
+
+const northaven = L.marker([1770, 885],{ icon: shieldIcon }).addTo(map);
+northaven.bindTooltip("1", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+northaven.bindPopup(`
+  <b>Northaven</b><br>
+  <a href="northaven.html">Open City Map</a>
+`);
+
+const cloudtine = L.marker([2040, 1320],{ icon: shieldIcon }).addTo(map);
+cloudtine.bindTooltip("2", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+cloudtine.bindPopup(`
+  <b>Cloudtine</b><br>
+  <a href="cloudtine.html">Open City Map</a>
+`);
+
+
+const wintercourt = L.marker([2100, 970],{ icon: shieldIcon }).addTo(map);
+wintercourt.bindTooltip("3", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+wintercourt.bindPopup(`
+  <b>Wintercourt</b><br>
+  <a href="wintercourt.html">Open City Map</a>
+`);
+
+
+const khardruun = L.marker([1930, 1040],{ icon: shieldIcon }).addTo(map);
+khardruun.bindTooltip("4", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+khardruun.bindPopup(`
+  <b>Khardruun</b><br>
+  <a href="khardruun.html">Open City Map</a>
+`);
+
+
+const westfront = L.marker([1740, 1355],{ icon: shieldIcon }).addTo(map);
+westfront.bindTooltip("5", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+westfront.bindPopup(`
+  <b>Westfront</b><br>
+  <a href="westfront.html">Open City Map</a>
+`);
+
+
+const spinecrest = L.marker([1850, 1521],{ icon: shieldIcon }).addTo(map);
+spinecrest.bindTooltip("6", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+spinecrest.bindPopup(`
+  <b>Spinecrest</b><br>
+  <a href="spinecrest.html">Open City Map</a>
+`);
+
+
+const ridgeend = L.marker([1940, 1810],{ icon: shieldIcon }).addTo(map);
+ridgeend.bindTooltip("7", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+ridgeend.bindPopup(`
+  <b>Ridgeend</b><br>
+  <a href="ridgeend.html">Open City Map</a>
+`);
+
+
+const wolfport = L.marker([1770, 1720],{ icon: shieldIcon }).addTo(map);
+wolfport.bindTooltip("8", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+wolfport.bindPopup(`
+  <b>Wolfport</b><br>
+  <a href="wolfport.html">Open City Map</a>
+`);
+
+
+const boltwick = L.marker([1850, 1900],{ icon: shieldIcon }).addTo(map);
+boltwick.bindTooltip("9", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+boltwick.bindPopup(`
+  <b>Boltwick</b><br>
+  <a href="boltwick.html">Open City Map</a>
+`);
+
+
+const thalantir = L.marker([1600, 1550],{ icon: shieldIcon }).addTo(map);
+thalantir.bindTooltip("10", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+thalantir.bindPopup(`
+  <b>Thalan'tir</b><br>
+  <a href="thalantir.html">Open City Map</a>
+`);
+
+
+const davorok = L.marker([1550, 1150],{ icon: shieldIcon }).addTo(map);
+davorok.bindTooltip("11", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+davorok.bindPopup(`
+  <b>Davorok</b><br>
+  <a href="davorok.html">Open City Map</a>
+`);
+
+
+const sunderwatch = L.marker([1400, 1440],{ icon: shieldIcon }).addTo(map);
+sunderwatch.bindTooltip("12", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+sunderwatch.bindPopup(`
+  <b>Sunderwatch</b><br>
+  <a href="sunderwatch.html">Open City Map</a>
+`);
+
+const stonehold = L.marker([1458, 1670],{ icon: shieldIcon }).addTo(map);
+stonehold.bindTooltip("13", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+stonehold.bindPopup(`
+  <b>Stonehold</b><br>
+  <a href="stonehold.html">Open City Map</a>
+`);
+
+
+const gladeforge = L.marker([1570, 1870],{ icon: shieldIcon }).addTo(map);
+gladeforge.bindTooltip("14", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+gladeforge.bindPopup(`
+  <b>Gladeforge</b><br>
+  <a href="gladeforge.html">Open City Map</a>
+`);
+
+
+const hearthwell = L.marker([1275, 1715],{ icon: shieldIcon }).addTo(map);
+hearthwell.bindTooltip("15", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+hearthwell.bindPopup(`
+  <b>Hearthwell</b><br>
+  <a href="hearthwell.html">Open City Map</a>
+`);
+
+
+const coppershore = L.marker([990, 1750],{ icon: shieldIcon }).addTo(map);
+coppershore.bindTooltip("16", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+coppershore.bindPopup(`
+  <b>Coppershore</b><br>
+  <a href="coppershore.html">Open City Map</a>
+`);
+
+
+const razamir = L.marker([905, 1950],{ icon: shieldIcon }).addTo(map);
+razamir.bindTooltip("17", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+razamir.bindPopup(`
+  <b>Razamir</b><br>
+  <a href="razamir.html">Open City Map</a>
+`);
+
+
+const dunelight = L.marker([960, 1510],{ icon: shieldIcon }).addTo(map);
+dunelight.bindTooltip("18", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+dunelight.bindPopup(`
+  <b>Dunelight</b><br>
+  <a href="dunelight.html">Open City Map</a>
+`);
+
+
+const sunmarkcross = L.marker([840, 1700],{ icon: shieldIcon }).addTo(map);
+sunmarkcross.bindTooltip("19", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+sunmarkcross.bindPopup(`
+  <b>Sunmark Cross</b><br>
+  <a href="sunmarkcross.html">Open City Map</a>
+`);
+
+
+const coralspire = L.marker([870, 2030],{ icon: shieldIcon }).addTo(map);
+coralspire.bindTooltip("20", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+coralspire.bindPopup(`
+  <b>Coralspire</b><br>
+  <a href="coralspire.html">Open City Map</a>
+`);
+
+
+const spearwindhold = L.marker([670, 1690],{ icon: shieldIcon }).addTo(map);
+spearwindhold.bindTooltip("21", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+spearwindhold.bindPopup(`
+  <b>Spearwind Hold</b><br>
+  <a href="spearwindhold.html">Open City Map</a>
+`);
+
+
+const horizonsrest = L.marker([690, 1960],{ icon: shieldIcon }).addTo(map);
+horizonsrest.bindTooltip("22", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+horizonsrest.bindPopup(`
+  <b>Horizon's Rest</b><br>
+  <a href="horizonsrest.html">Open City Map</a>
+`);
+
+
+const bellorosa = L.marker([330, 1840],{ icon: shieldIcon }).addTo(map);
+bellorosa.bindTooltip("23", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+bellorosa.bindPopup(`
+  <b>Bellorosa</b><br>
+  <a href="bellorosa.html">Open City Map</a>
+`);
+
+
+const tidefall = L.marker([720, 1350],{ icon: shieldIcon }).addTo(map);
+tidefall.bindTooltip("24", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+tidefall.bindPopup(`
+  <b>Tidefall</b><br>
+  <a href="tidefall.html">Open City Map</a>
+`);
+
+
+const saltcrown = L.marker([480, 1310],{ icon: shieldIcon }).addTo(map);
+saltcrown.bindTooltip("25", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+saltcrown.bindPopup(`
+  <b>Saltcrown</b><br>
+  <a href="saltcrown.html">Open City Map</a>
+`);
+
+</script>
+
+</body>
+</html>
