@@ -1,0 +1,993 @@
+<head>
+  <title>Stonehold Map</title>
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+
+    .leaflet-top.leaflet-left {
+      top: 140px;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #map {
+      height: 100vh;
+      width: 100vw;
+      background: black;
+    }
+
+    .leaflet-container {
+      z-index: 1;
+    }
+
+    #backButton {
+
+      position: absolute;
+      top: 20px;
+      left: 20px;
+
+      z-index: 3000;
+
+      padding: 12px 18px;
+
+      background: #2d2418;
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      text-decoration: none;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+    }
+
+    #loreButton {
+
+      position: absolute;
+
+      top: 80px;
+      left: 20px;
+
+      z-index: 3000;
+
+      padding: 12px 18px;
+
+      background: #2d2418;
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      cursor: pointer;
+
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+    }
+
+    #legend {
+
+      position: absolute;
+
+      top: 20px;
+      right: 20px;
+
+      z-index: 2000;
+
+      width: 260px;
+
+      padding: 12px;
+
+      background-color: rgba(28,22,16,0.92);
+
+      border: 2px solid #8d6b3f;
+      border-radius: 8px;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.65);
+
+      max-height: 85vh;
+
+      overflow-y: auto;
+
+    }
+
+    #legend h2 {
+
+      margin: 0 0 10px 0;
+
+      color: #d8c08d;
+
+      font-size: 16px;
+
+      border-bottom: 1px solid rgba(216,192,141,0.35);
+
+      padding-bottom: 6px;
+
+    }
+
+    .legend-item {
+
+      display: flex;
+
+      align-items: center;
+
+      margin-bottom: 6px;
+
+      font-size: 13px;
+
+    }
+
+    .legend-number {
+
+      width: 18px;
+      height: 18px;
+
+      margin-right: 8px;
+
+      border-radius: 50%;
+
+      background-color: #8d6b3f;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      font-size: 11px;
+      font-weight: bold;
+
+      color: #fff8e7;
+
+      flex-shrink: 0;
+
+    }
+
+    .marker-label {
+
+      background: rgba(35,28,20,0.95);
+
+      border: 2px solid #8d6b3f;
+      border-radius: 6px;
+
+      color: #f0e6c8;
+
+      font-family: serif;
+      font-size: 12px;
+      font-weight: bold;
+
+      padding: 2px 6px;
+
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+      text-align: center;
+
+    }
+
+    .leaflet-tooltip.marker-label {
+
+      background: rgba(35,28,20,0.95);
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+    }
+
+    .leaflet-popup-content-wrapper {
+
+      background: rgba(28,22,16,0.96);
+
+      color: #f0e6c8;
+
+      border: 2px solid #8d6b3f;
+      border-radius: 10px;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+
+      font-family: Georgia, serif;
+
+    }
+
+    .leaflet-popup-content {
+
+      margin: 14px 16px;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+    }
+
+    .leaflet-popup-content b {
+
+      color: #d8c08d;
+
+      font-size: 16px;
+
+    }
+
+    .leaflet-popup-tip {
+      background: rgba(28,22,16,0.96);
+    }
+
+    #lorePanel {
+
+      position: absolute;
+
+      top: 0;
+      right: -420px;
+
+      width: 400px;
+      height: 100vh;
+
+      background: #18120c;
+
+      border-left: 2px solid #8d6b3f;
+
+      z-index: 5000;
+
+      transition: right 0.35s ease;
+
+      overflow-y: auto;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+
+    }
+
+    #lorePanel.open {
+      right: 0;
+    }
+
+    #loreHeader {
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 18px;
+
+      border-bottom:
+        1px solid rgba(216,192,141,0.25);
+
+    }
+
+    #loreHeader h2 {
+
+      margin: 0;
+
+      color: #d8c08d;
+
+    }
+
+    #closeLore {
+
+      background: none;
+
+      border: none;
+
+      color: #d8c08d;
+
+      font-size: 28px;
+
+      cursor: pointer;
+
+    }
+
+    #loreTabs {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 14px 18px;
+
+    }
+
+    .loreTab {
+
+      background: rgba(45,36,24,0.95);
+
+      border: 1px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      padding: 8px 12px;
+
+      cursor: pointer;
+
+      font-family: Georgia, serif;
+
+    }
+
+    .loreTab.active {
+
+      background: #8d6b3f;
+
+      color: #fff8e7;
+
+    }
+
+    .loreContent {
+
+      display: none;
+
+      padding: 20px;
+
+      line-height: 1.7;
+
+    }
+
+    .loreContent.active {
+      display: block;
+    }
+
+    .loreContent h3 {
+
+      color: #d8c08d;
+
+      border-bottom:
+        1px solid rgba(216,192,141,0.2);
+
+      padding-bottom: 4px;
+
+    }
+
+    .map-label {
+
+      color: #d6e8ff;
+
+      font-family: Georgia, serif;
+
+      font-size: 20px;
+
+      font-style: italic;
+
+      text-shadow:
+        0 0 4px rgba(0,0,0,0.8),
+        0 0 10px rgba(0,0,0,0.7);
+
+      white-space: nowrap;
+
+      pointer-events: none;
+
+    }
+
+    .leaflet-tooltip-top:before,
+    .leaflet-tooltip-bottom:before,
+    .leaflet-tooltip-left:before,
+    .leaflet-tooltip-right:before {
+      display: none !important;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<a href="index.html" id="backButton">
+  ← Back to World Map
+</a>
+
+<button id="loreButton"
+onclick="toggleLorePanel()">
+Lore </button>
+
+<div id="legend">
+
+  <h2>Stonehold</h2>
+
+  <div class="legend-item"><span class="legend-number">1</span>Great Hearth Hall</div>
+  <div class="legend-item"><span class="legend-number">2</span>Masons Amphitheatre</div>
+  <div class="legend-item"><span class="legend-number">3</span>Rockplaza</div>
+  <div class="legend-item"><span class="legend-number">4</span>Riverward</div>
+  <div class="legend-item"><span class="legend-number">5</span>Stoneflow Docks</div>
+  <div class="legend-item"><span class="legend-number">6</span>Carver's Channel</div>
+  <div class="legend-item"><span class="legend-number">7</span>Rivermarket</div>
+  <div class="legend-item"><span class="legend-number">8</span>Graniteloom Quarry</div>
+  <div class="legend-item"><span class="legend-number">9</span>Echopits</div>
+  <div class="legend-item"><span class="legend-number">10</span>Stonelash Terrace</div>
+  <div class="legend-item"><span class="legend-number">11</span>Oldstone District</div>
+  <div class="legend-item"><span class="legend-number">12</span>First Foundry</div>
+  <div class="legend-item"><span class="legend-number">13</span>Ancestor's Walk</div>
+  <div class="legend-item"><span class="legend-number">14</span>Chiselvault</div>
+  <div class="legend-item"><span class="legend-number">15</span>Hearthforge Monastery</div>
+  <div class="legend-item"><span class="legend-number">16</span>Masterwork</div>
+  <div class="legend-item"><span class="legend-number">17</span>Apprentice Stair</div>
+  <div class="legend-item"><span class="legend-number">18</span>Stoneclock</div>
+  <div class="legend-item"><span class="legend-number">19</span>Quarry Gardens</div>
+  <div class="legend-item"><span class="legend-number">20</span>The Longbenches</div>
+  <div class="legend-item"><span class="legend-number">21</span>The Rising Steps</div>
+</div>
+
+<div id="lorePanel">
+
+  <div id="loreHeader">
+
+```
+<h2>Stonehold</h2>
+
+<button id="closeLore"
+  onclick="toggleLorePanel()">
+  ×
+</button>
+```
+
+  </div>
+
+  <div id="loreTabs">
+
+
+<button class="loreTab active"
+  onclick="openLoreTab(event, 'overview')">
+  Overview
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'description')">
+  Description
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'politics')">
+  Politics
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'culture')">
+  Culture
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'history')">
+  History
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'landmarks')">
+  Landmarks
+</button>
+
+
+  </div>
+
+  <div class="loreContent active" id="overview">
+
+```
+<h3>Kingdom</h3>
+<p>Heartlands</p>
+
+<h3>Symbol</h3>
+<p>Hammer</p>
+
+<h3>Trade</h3>
+
+<p>
+  Stone mining<br>
+  Granite, marble, basalt & limestone<br>
+  Master stonemasonry<br>
+  Clay and ceramics<br>
+  Architectural craftsmanship
+</p>
+```
+
+  </div>
+
+  <div class="loreContent" id="description">
+
+```
+<h3>Description</h3>
+
+<p>
+The city spreads across enormous terraces of pale grey stone beneath towering cliffs scarred by centuries of quarrying. Massive stairways, carved plazas, and broad processional roads divide districts filled with heavy dwarven and giant architecture, sprawling residential quarters, and monuments so old many citizens no longer remember who first built them. Everywhere the sound of stone echoes through the air — chisels striking marble, cranes hauling blocks through the quarry pits, water channels grinding cutting wheels, and distant hammering from deep beneath the mountain.
+<p>
+Unlike many dwarven cities, Stonehold feels open. Sunlight reaches much of the city through vast plazas and exposed terraces overlooking the valleys below. Markets bustle beneath carved colonnades while great statues and obelisks line roads leading toward the central Great Hearth Hall. Aqueducts and stone-cutting channels carry cold mountain water through workshops where masons shape blocks for temples, bridges, keeps, and monuments exported across the kingdoms. Even the poorer districts possess a sense of permanence, their homes built from fitted stone meant to endure for generations.
+<p>
+Yet beneath the proud civic grandeur lies the deeper mountain. Mine entrances and tunnel gates disappear into darkness near the northern reaches of the city, guarded by ancient watchposts and monastery bells echoing from higher ridges. Citizens speak casually about the lower workings and old quarry depths, but visitors quickly notice how often conversations stop when the deepest tunnels are mentioned. Stonehold is a city devoted to shaping stone — but also one that understands the mountain is always shaping them in return.
+</p>
+```
+
+  </div>
+
+  <div class="loreContent" id="politics">
+
+```
+<h3>Rulers</h3>
+
+<p>
+
+  Stonehold is governed by the Hearth Circle, a rotating council of five master masons elected every five years.<br><br>
+
+  <b>Mara Rockborne</b><br>
+  Pragmatic leader supporting foreign trade.<br><br>
+
+  <b>Tholin Kilgarich</b><br>
+  Traditionalist overseeing apprenticeships.<br><br>
+
+  <b>Dora Galar</b><br>
+  Oversees river authority and transport laws.<br><br>
+
+  <b>Krundin Gunhildd</b><br>
+  Chief architect and city planner.<br><br>
+
+  <b>Bromm Orebend</b>
+
+</p>
+
+<h3>Key Factions</h3>
+
+<p>
+  Hearth Circle - Stonehold's governing council of elected master masons. Members are judged as much by the works they leave behind as by the policies they enact.<br>
+  The Conserve - The city's most influential coalition of masons, architects, sculptors and engineers. The Conserve oversees major civic projects and often determines which works will shape Stonehold for generations.<br>
+  Quarrymasters Accord - The powerful organisation responsible for Stonehold's quarries, mining operations and stone exports. Their control over the city's raw materials grants them considerable political influence.<br>
+  Greymantles - Stonehold's city guard and keepers of civic order. Known for their professionalism and restraint, they are often entrusted with protecting monuments, archives and public works as much as citizens.<br>
+  Monks of the hearthforge -A monastic order dedicated to preserving traditional crafts, techniques and records. Their ceramic tablets, kiln-fired archives and instructional works can be found throughout Stonehold.
+<br>The Memory Keepers - A respected order of archivists, historians and stonewrights responsible for preserving Stonehold's records, inscriptions and civic memory. They oversee the Chiselvault archives, maintain the city's memory walls and ensure that important achievements are remembered long after their creators are gone.
+<br>The Rising Hands - A city-wide fellowship supporting apprentices across Stonehold's many crafts. The organisation sponsors training, mediates placements and provides opportunities for promising students to earn recognition through public works and civic projects.
+</p>
+```
+
+  </div>
+
+  <div class="loreContent" id="culture">
+
+```
+<h3>Culture & Traditions</h3>
+<b>Culture</b>
+<br>Public craftsmanship is deeply respected within Stonehold. Massive public works are celebrated with festivals and unveiled during city gatherings. 
+<br><br>
+Apprenticeships are highly competitive and many families spend generations within the same craft halls.
+<br><br>Citizens often earn honorary titles based on their crafts
+<br><br>
+<b>Memory walls</b>
+<br>citizens often carve names of births, deaths and accomplishments into shared public walls rather than paper records alone
+<br><br><b>The turning of the sundial</b>
+<br> Each midsummer, thousands gather around the Stoneclock to witness the Turning of the Sundial. As the sun reaches its highest point, bells ring throughout the city and the names of notable citizens, completed works and recent achievements are formally recorded by the Memory Keepers. Many regard it as Stonehold's most important civic celebration, a reminder that every generation contributes another stone to the city's legacy.
+<br>The team of Turners are selected by citywide competition; teams compete in the suntrials including stone setting, endurance runs and speed carving.
+<br>Workshops close throughout the city and communal feasts fill plazas, markets and gardens. Families picnic around the Stoneclock while musicians, storytellers and craftsmen gather to celebrate the year's achievements. 
+ <br><br>
+<b>The Masterworks</b>
+<br>Every half century, Stonehearth builds one new monument as a tribute to a exemplary craftmanship
+The next Masterwork is due in 7 years, generating political competition, artistic rivalries, and conspiracies.
+Previous awards have been:
+<br>    +Torran Spatchfin for the The Apprentice’s Stair – 777 steps carved to “test the endurance of the craft.”
+<br>    +Mora Stonebraid -legendary mason who carved an entire mural blindfolded.
+<br>+Derren & Linette Kilgarich for The Stoneclock 
+<br><br>The First Masterwork: Stonehold's oldest Masterwork has no known creator. Records identifying its builders were lost centuries ago, leading some to claim the monument was intentionally left unsigned to prove that legacy matters more than recognition.
+<br><br>The Masterwork ceremony includes:
+<br> the raising of the piller: the new pillar is unveiled and every contributor is carved on it
+<br>The procession of names: Memory keepers walk through the streets reading the names of every contributor
+<br>The Empty Chisel: The final name is only carved at the ceremony by the youngest surviving contributor
+<br>In the preceding years the Great Debate rages about what deserves to be remembered, ready for the vote
+<br>The week of the unveiling is filled with city feasts, games and dances. 
+
+
+ <br><br>
+<b>Mark Stones</b><br>
+Citizens carve small personal marks into approved public walls when reaching major milestones.
+
+<p><b>Superstitions</b>
+<br>Touchstone - similar to touch wood <br>
+Tools are washed in quarrywater before their first use for longevity
+<br>Empty Foundations-New buildings are traditionally left empty for one night before occupation.. The city 'settles around them.'
+
+<p><b>Food</b>
+<br>Honeyed Root Bake - Root vegetables, herbs and local honey baked in ceramic dishes.
+<br>Baked goats cheese - Sharp white cheese often baked in clay ovend and shared with bread
+<br>Whitepear Mead - sweet mead flavoured with pears
+
+<br><br>
+<b>Sayings</b><br>
+'The mountain isn't done with us yet' - for hope or caution
+<br>'A Legacy belongs to many' - noone does anything alone
+<br>'Build for those you'll never meet' - about quality of work
+
+
+</p>
+```
+
+  </div>
+
+  <div class="loreContent" id="history">
+
+```
+<h3>Histories & Legends</h3>
+
+<p>
+<b>The Found City</b><br>
+Legend claims Stonehold was not built, but uncovered. Early quarry workers digging into the cliffs supposedly revealed ancient roads, walls and foundations already waiting beneath the earth. At the centre stood a single immense stone that resisted every attempt at removal. Taking it as a sign, the settlers expanded upon what they had found rather than building elsewhere. Most dismiss the tale as folklore, though discoveries beneath Stonehold continue to fuel speculation. Some claim the Stone That Refused still rests beneath the Great Hearth Hall.
+
+
+  <p><b>The Giants of Auldthrone</b><br>
+  Ancient stories tell of stone giants who taught the earliest dwarves the secrets of masonry before vanishing into the mountains. Many still leave polished pebbles in hidden caves as offerings.<br><br>
+
+<p><b>The sleeping mason</b>
+<br>A giant stone figure supposedly buried somewhere beneath the city.
+Legend says Stonehold sits atop its chest.
+When earthquakes strike, citizens joke:
+“The mason turns in his sleep.”
+
+<p><b>The Weeping Statues</b>
+<br>Certain ancient statues in the old districts sometimes develop unexplained moisture resembling tears before deaths of important citizens.
+Nobody publicly discusses it.
+
+<p><b>The Returning Chisel</b>
+<br>A beautifully crafted chisel displayed within the Great Hearth Hall. According to tradition, it has been lost, stolen and misplaced dozens of times throughout history, yet always finds its way back to Stonehold. No two accounts agree on how.
+
+</p>
+```
+
+  </div>
+
+  <div class="loreContent" id="landmarks">
+
+```
+<h3>Nearby Landmarks</h3>
+
+<p>
+
+  <b>The Fallen Pantheon</b><br>
+  Enormous figures carved into nearby cliffsides, believed to predate recorded history. Scholars disagree whether they depict forgotten gods, ancient rulers or the giants of Auldthrone.
+<br><br>
+
+  <b>Skyfall Quarry</b><br>
+  A quarry famed for its unusually pure marble. Many of Stonehold's most celebrated monuments began as stone cut from its depths..<br><br>
+
+  <b>The Canaries</b><br>
+  Strange runes carved throughout portions of the lower tunnels. Miners claim they emit faint echoes before cave-ins or collapses, earning them the nickname "The Canaries".<br><br>
+
+  <b>The Perfect Bridge</b><br>
+  An ancient bridge spanning a deep gorge without mortar, cement or visible supports. Despite centuries of study, no engineer has successfully improved upon its design.
+<br><br>
+<b>The halfway house</b>
+<br>Originally built as a temporary shelter for workers constructing a mountain road, it remained long after the project was finished. Every generation has repaired, expanded or improved it, and nobody knows who technically owns it.
+
+<br><br>
+<b>The Spring Peak</b><br>
+A towering mountain overlooking the region, left untouched despite rich stone deposits. Enormous herds of mountain goats, gryphons and other wildlife nest upon its slopes, and generations of Stonehold's leaders have refused permission to quarry it. Reaching the quarries beyond still requires crossing its treacherous passes. 
+<br><br>
+<b>The Footling Grove</b><br>
+An ancient grove maintained by a circle of druids at the foot of the mountains who have long opposed Stonehold's expansion into the surrounding wilderness. Relations remain cordial, though disagreements over quarrying rights and road construction are common.
+
+<br><br>
+<b>Great Tomb</b><br>
+A vast stone mausoleum carved into a nearby mountainside. Though many chambers have been explored, sealed doors and unfinished passages continue to fuel rumours of forgotten vaults deeper within.
+
+<br><br>
+<b>The Hollow City</b>
+<br>Far beneath the Echopits lies a vast abandoned city carved directly into the mountain. Its builders are disputed; some claim duergar, others giants, while a few insist it predates both. Gnoll packs, cave predators and stranger inhabitants are known to occupy its outer districts, though few expeditions have mapped more than a fraction of its streets.
+<br><br>
+<b>The Shepherd's Crown</b>
+<br>A high plateau overlooking the valleys where vast herds are grazed during the summer months. Though peaceful today, ancient standing stones scattered across the grasslands suggest the site once held greater significance.
+
+</p>
+```
+
+  </div>
+
+</div>
+
+<div id="map"></div>
+
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+<script>
+
+const map = L.map('map', {
+  crs: L.CRS.Simple,
+  minZoom: 0
+});
+
+const bounds = [[0,0], [720,1080]];
+
+L.imageOverlay('stonehold.png', bounds).addTo(map);
+
+map.fitBounds(bounds);
+
+const shieldIcon = L.icon({
+
+  iconUrl: 'shield.png',
+
+  iconSize: [20,20],
+
+  iconAnchor: [10,10],
+
+  popupAnchor: [0,-20]
+
+});
+
+function createMarker(number, coords, title, desc) {
+
+  const marker = L.marker(coords, {
+    icon: shieldIcon
+  }).addTo(map);
+
+  marker.bindTooltip(number.toString(), {
+
+    permanent: true,
+
+    direction: "center",
+
+    className: "marker-label"
+
+  });
+
+  marker.bindPopup(`
+    <b>${title}</b><br>
+    ${desc}
+  `);
+
+}
+
+const mapLabels = [];
+
+function createMapLabel(text, coords, rotation, zoomLevel = 2) {
+
+  const label = L.marker(coords, {
+
+    interactive: false,
+
+    icon: L.divIcon({
+
+      className: 'map-label',
+
+      html: `
+        <div style="transform: rotate(${rotation}deg);">
+          ${text}
+        </div>
+      `,
+
+      iconSize: [220,30]
+
+    })
+
+  });
+
+  label.minZoom = zoomLevel;
+
+  mapLabels.push(label);
+
+}
+
+function updateMapLabels() {
+
+  mapLabels.forEach(label => {
+
+    if (map.getZoom() >= label.minZoom) {
+
+      if (!map.hasLayer(label)) {
+        label.addTo(map);
+      }
+
+    } else {
+
+      if (map.hasLayer(label)) {
+        map.removeLayer(label);
+      }
+
+    }
+
+  });
+
+}
+
+map.on('zoomend', updateMapLabels);
+
+updateMapLabels();
+
+/* ===== MARKERS ===== */
+
+createMarker(1, [518,424],
+  "Great Hearth Hall",
+  "The civic heart of Stonehold and seat of the Hearth Circle. Public debates, celebrations, monument unveilings and council meetings all take place beneath its vast vaulted halls. Though the upper floors house visiting dignitaries, civic leaders and honoured guests, much of the building remains open to the public as a symbol that the city's future belongs to all who help build it."
+);
+
+createMarker(2, [299,262],
+  "Masons Amphitheatre",
+  "A grand open-air amphitheatre carved directly into the stone. Competitions, performances and public ceremonies draw crowds from across the city throughout the year."
+);
+
+createMarker(3, [244,563],
+  "Rockplaza",
+  "Stonehold's bustling central square, surrounded by workshops, guild offices and market stalls. Traders, craftsmen and citizens gather here beneath the shadow of the Stoneclock."
+);
+
+createMarker(4, [614,317],
+  "Riverward",
+  "An affluent riverside district of grand homes, private courtyards and waterside terraces. Though primarily residential, its quays and boathouses remain closely tied to the river trade that helped build Stonehold's wealth."
+);
+
+createMarker(5, [608,184],
+  "Stoneflow Docks",
+  "Stone quays and loading platforms where barges carry quarried stone, ceramics and finished works throughout the Heartlands. Massive cranes and lifting rigs dominate the waterfront."
+);
+
+createMarker(6, [495,221],
+  "Carver's Channel",
+  "A district of workshops and water-driven cutting yards where raw stone is shaped into blocks, statues and architectural works before being transported across the city."
+);
+
+createMarker(7, [545,260],
+  "Rivermarket",
+  "A lively market district built along the waterways, where traders sell everything from quarry tools and ceramics to food, livestock and imported goods."
+);
+
+createMarker(8, [627,742],
+  "Graniteloom Quarry",
+  "The largest active quarry in the region. Terraces of pale stone descend deep into the mountainside where generations of masons have supplied Stonehold's endless appetite for building."
+);
+
+createMarker(9, [671,428],
+  "Echopits",
+  "The vast network of mines and tunnels running beneath Stonehold. Active workings stretch alongside abandoned shafts, forgotten chambers and depths whose original purpose has long been lost to history."
+);
+
+createMarker(10, [458,959],
+  "Stonelash Terrace",
+  "A sprawling residential district of workshops, family homes and communal courtyards. Generations of craftsmen, labourers and apprentices have called its stone terraces home."
+);
+
+createMarker(11, [445,146],
+  "Oldstone District",
+  "The oldest surviving quarter of Stonehold. Its winding streets, weathered monuments and centuries-old homes preserve much of the city's earliest character."
+);
+
+createMarker(12, [375,180],
+  "First Foundry",
+  "Stonehold's oldest operating foundry, where traditional methods are preserved alongside the city's craft heritage. Many apprentices still spend time here learning techniques centuries older than themselves."
+);
+
+createMarker(13, [124,523],
+  "Ancestor's Walk",
+  "A broad processional road tracing the city walls, lined with statues, memorial stones and plaques commemorating generations of builders whose works still shape Stonehold today."
+);
+
+createMarker(14, [612,1022],
+  "Chiselvault",
+  "A labyrinth of stone vaults beneath the city containing archives, records, private lockboxes and ancient storehouses. Some sections are open to the public, while others remain sealed behind generations of secrets."
+);
+
+createMarker(15, [616,909],
+  "Hearthforge Monastery",
+  "A secluded monastery overlooking the city where monks preserve traditional crafts, ceramic techniques and historical records passed down through generations."
+);
+
+createMarker(16, [78,838],
+  "Masterwork",
+  "One of Stonehold's many Masterworks, monumental civic projects commissioned to celebrate exceptional craftsmanship. New additions join the city every fifty years, ensuring each generation leaves its mark upon Stonehold."
+);
+
+createMarker(17, [544,899],
+  "Apprentice Stair",
+  "A long steady staircase carved by generations of apprentices as proof of their skill and dedication. Each section bears the marks of those who helped create it."
+);
+
+createMarker(18, [395,557],
+  "Stoneclock",
+  "A colossal stone sundial at the centre of the city, used to mark civic ceremonies, seasonal festivals and the passing of generations."
+);
+
+createMarker(19, [613,22],
+  "Quarry Gardens",
+  "Terraced gardens created within an exhausted quarry, now used for public gatherings, festivals and quiet reflection."
+);
+
+createMarker(20, [444,836],
+  "The Longbenches",
+  "An indoor food and drink market named for the long communal tables running through its centre. Craftsmen, apprentices and merchants gather here daily, making it one of the busiest meeting places in Stonehold."
+);
+
+createMarker(21, [170,394],
+  "The Rising Steps",
+  "A complex of workshops and training yards occupying Stonehold's lower terraces. Apprentices traditionally begin their careers here, working their way upward through the city as their skills improve. To 'earn a place in the sun' remains a common expression for achieving mastery."
+);
+
+
+
+
+/* ===== ZOOM LABELS ===== */
+
+createMapLabel(
+  "Brickroad",
+  [6,517],
+  0,
+  2
+);
+
+createMapLabel(
+  "Seraphine Spring",
+  [672,207],
+  0,
+  2
+);
+
+/* ===== COORDINATE FINDER ===== */
+
+map.on('click', function(e) {
+
+  alert(
+    "[" +
+    Math.round(e.latlng.lat) +
+    "," +
+    Math.round(e.latlng.lng) +
+    "]"
+  );
+
+});
+
+/* ===== LORE PANEL ===== */
+
+function toggleLorePanel() {
+
+  document
+    .getElementById('lorePanel')
+    .classList
+    .toggle('open');
+
+}
+
+/* ===== TAB SYSTEM ===== */
+
+function openLoreTab(evt, tabName) {
+
+  const contents =
+    document.getElementsByClassName('loreContent');
+
+  for (let i = 0; i < contents.length; i++) {
+
+    contents[i]
+      .classList
+      .remove('active');
+
+  }
+
+  const tabs =
+    document.getElementsByClassName('loreTab');
+
+  for (let i = 0; i < tabs.length; i++) {
+
+    tabs[i]
+      .classList
+      .remove('active');
+
+  }
+
+  document
+    .getElementById(tabName)
+    .classList
+    .add('active');
+
+  evt.currentTarget
+    .classList
+    .add('active');
+
+}
+
+</script>
+
+</body>
+</html>
