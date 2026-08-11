@@ -217,19 +217,35 @@ max-height: 70vh;   /* Limits height to 70% of screen */
 }
 
   
-#legendToggle{display:none;position:absolute;top:20px;right:20px;z-index:1100;background:rgba(28,22,16,.92);color:#f0e6c8;border:2px solid #8d6b3f;border-radius:8px;padding:8px 12px;font-size:22px}
+.number-marker-label{
+background:#8d6b3f;
+color:#fff8e7;
+border:2px solid #f0e6c8;
+border-radius:50%;
+width:30px;height:30px;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+font-size:14px;
+box-shadow:0 2px 8px rgba(0,0,0,.5);
+}
+#legendToggle{display:none;}
 @media (max-width:768px){
-#legendToggle{display:block}
-#legend{display:none;top:70px;right:10px;width:220px;max-width:80vw}
-#legend.open{display:block}
-#mapToggle{top:20px;left:10px;font-size:12px;padding:6px 10px}
-.marker-label{font-size:11px;padding:2px 6px}
+#legend{transform:translateX(110%);transition:.25s ease;}
+#legend.open{transform:translateX(0);}
+#legendToggle{
+display:block;position:absolute;top:20px;right:20px;z-index:1001;
+background:#1c1610;color:#f0e6c8;border:2px solid #8d6b3f;
+border-radius:8px;padding:8px 12px;font-size:22px;
+}
 }
 
 </style>
 </head>
 
 <body>
+<button id="legendToggle">☰</button>
 
 <div id="legend">
 
@@ -381,18 +397,12 @@ max-height: 70vh;   /* Limits height to 70% of screen */
     Show Borders
 </button>
 
-<button id="legendToggle">☰</button>
 <div id="map"></div>
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js">
-document.addEventListener('DOMContentLoaded',()=>{
- const b=document.getElementById('legendToggle');
- const l=document.getElementById('legend');
- if(window.innerWidth<=768){
-   l.classList.remove('open');
-   b.onclick=()=>l.classList.toggle('open');
- }
+document.getElementById('legendToggle').addEventListener('click',()=>{
+ document.getElementById('legend').classList.toggle('open');
 });
 
 </script>
@@ -421,14 +431,10 @@ let showingPolitical = false;
   // Fit map to screen
   map.fitBounds(bounds);
 
-const shieldIcon = L.icon({
-  iconUrl: 'shield.png',
-
-  iconSize: [20, 20],
-
-  iconAnchor: [10, 20],
-
-  popupAnchor: [0, -20]
+const shieldIcon = L.divIcon({
+  className: 'number-marker',
+  html: '',
+  iconSize: [1,1]
 });
 
 
@@ -461,7 +467,7 @@ northaven.bindTooltip("1", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 northaven.bindPopup(`
   <b>Northaven</b><br>
@@ -473,7 +479,7 @@ cloudtine.bindTooltip("5", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 cloudtine.bindPopup(`
@@ -487,7 +493,7 @@ wintercourt.bindTooltip("3", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 wintercourt.bindPopup(`
@@ -501,7 +507,7 @@ khardruun.bindTooltip("2", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 khardruun.bindPopup(`
@@ -515,7 +521,7 @@ westfront.bindTooltip("8", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 westfront.bindPopup(`
@@ -529,7 +535,7 @@ spinecrest.bindTooltip("6", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 spinecrest.bindPopup(`
@@ -543,7 +549,7 @@ ridgeend.bindTooltip("7", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 ridgeend.bindPopup(`
@@ -557,7 +563,7 @@ wolfport.bindTooltip("9", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 wolfport.bindPopup(`
@@ -571,7 +577,7 @@ boltwick.bindTooltip("10", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 boltwick.bindPopup(`
@@ -585,7 +591,7 @@ thalantir.bindTooltip("12", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 thalantir.bindPopup(`
@@ -599,7 +605,7 @@ davorok.bindTooltip("11", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 davorok.bindPopup(`
@@ -613,7 +619,7 @@ sunderwatch.bindTooltip("14", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 sunderwatch.bindPopup(`
@@ -626,7 +632,7 @@ stonehold.bindTooltip("15", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 stonehold.bindPopup(`
@@ -640,7 +646,7 @@ gladeforge.bindTooltip("13", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 gladeforge.bindPopup(`
@@ -654,7 +660,7 @@ hearthwell.bindTooltip("17", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 hearthwell.bindPopup(`
@@ -668,7 +674,7 @@ coppershore.bindTooltip("18", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 coppershore.bindPopup(`
@@ -682,7 +688,7 @@ razamir.bindTooltip("20", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 razamir.bindPopup(`
@@ -696,7 +702,7 @@ dunelight.bindTooltip("19", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 dunelight.bindPopup(`
@@ -710,7 +716,7 @@ sunmarkcross.bindTooltip("21", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 sunmarkcross.bindPopup(`
@@ -724,7 +730,7 @@ coralspire.bindTooltip("22", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 coralspire.bindPopup(`
@@ -738,7 +744,7 @@ spearwindhold.bindTooltip("24", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 spearwindhold.bindPopup(`
@@ -752,7 +758,7 @@ horizonsrest.bindTooltip("25", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 horizonsrest.bindPopup(`
@@ -766,7 +772,7 @@ bellorosa.bindTooltip("27", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 bellorosa.bindPopup(`
@@ -780,7 +786,7 @@ tidefall.bindTooltip("23", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 tidefall.bindPopup(`
@@ -794,7 +800,7 @@ saltcrown.bindTooltip("26", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 saltcrown.bindPopup(`
@@ -808,7 +814,7 @@ uni.bindTooltip("16", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 uni.bindPopup(`
@@ -822,7 +828,7 @@ bridge.bindTooltip("4", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 bridge.bindPopup(`
@@ -835,7 +841,7 @@ volc.bindTooltip("28", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "marker-label"
+  className: "number-marker-label"
 });
 
 volc.bindPopup(`
@@ -861,13 +867,8 @@ map.on('click', function(e) {
 
 
 
-document.addEventListener('DOMContentLoaded',()=>{
- const b=document.getElementById('legendToggle');
- const l=document.getElementById('legend');
- if(window.innerWidth<=768){
-   l.classList.remove('open');
-   b.onclick=()=>l.classList.toggle('open');
- }
+document.getElementById('legendToggle').addEventListener('click',()=>{
+ document.getElementById('legend').classList.toggle('open');
 });
 
 </script>
