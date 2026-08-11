@@ -217,28 +217,26 @@ max-height: 70vh;   /* Limits height to 70% of screen */
 }
 
   
-.number-marker-label{
-background:#8d6b3f;
-color:#fff8e7;
-border:2px solid #f0e6c8;
-border-radius:50%;
-width:30px;height:30px;
-display:flex;
-align-items:center;
-justify-content:center;
-font-weight:bold;
-font-size:14px;
+#legendToggle{display:none;}
+.number-marker{
+display:flex!important;align-items:center;justify-content:center;
+width:34px;height:34px;border-radius:50%;
+background:#8d6b3f;border:2px solid #f0e6c8;
+color:#fff;font-weight:bold;font-family:Georgia,serif;
 box-shadow:0 2px 8px rgba(0,0,0,.5);
 }
-#legendToggle{display:none;}
-@media (max-width:768px){
-#legend{transform:translateX(110%);transition:.25s ease;}
+@media(max-width:768px){
+#legend{
+right:0;top:64px;transform:translateX(105%);
+transition:transform .25s;
+}
 #legend.open{transform:translateX(0);}
 #legendToggle{
-display:block;position:absolute;top:20px;right:20px;z-index:1001;
+display:block;position:absolute;right:20px;top:20px;z-index:2000;
 background:#1c1610;color:#f0e6c8;border:2px solid #8d6b3f;
-border-radius:8px;padding:8px 12px;font-size:22px;
+border-radius:8px;padding:8px 12px;font-size:22px;cursor:pointer;
 }
+.leaflet-tooltip.marker-label{display:none;}
 }
 
 </style>
@@ -401,9 +399,13 @@ border-radius:8px;padding:8px 12px;font-size:22px;
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js">
-document.getElementById('legendToggle').addEventListener('click',()=>{
- document.getElementById('legend').classList.toggle('open');
+document.querySelectorAll('.marker-label').forEach(el=>{
+  el.classList.add('number-marker');
 });
+const t=document.getElementById('legendToggle');
+if(t){
+ t.addEventListener('click',()=>document.getElementById('legend').classList.toggle('open'));
+}
 
 </script>
 
@@ -431,10 +433,14 @@ let showingPolitical = false;
   // Fit map to screen
   map.fitBounds(bounds);
 
-const shieldIcon = L.divIcon({
-  className: 'number-marker',
-  html: '',
-  iconSize: [1,1]
+const shieldIcon = L.icon({
+  iconUrl:'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==',
+
+  iconSize:[1,1],
+
+  iconAnchor:[0,0],
+
+  popupAnchor: [0, -20]
 });
 
 
@@ -467,7 +473,7 @@ northaven.bindTooltip("1", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 northaven.bindPopup(`
   <b>Northaven</b><br>
@@ -479,7 +485,7 @@ cloudtine.bindTooltip("5", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 cloudtine.bindPopup(`
@@ -493,7 +499,7 @@ wintercourt.bindTooltip("3", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 wintercourt.bindPopup(`
@@ -507,7 +513,7 @@ khardruun.bindTooltip("2", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 khardruun.bindPopup(`
@@ -521,7 +527,7 @@ westfront.bindTooltip("8", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 westfront.bindPopup(`
@@ -535,7 +541,7 @@ spinecrest.bindTooltip("6", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 spinecrest.bindPopup(`
@@ -549,7 +555,7 @@ ridgeend.bindTooltip("7", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 ridgeend.bindPopup(`
@@ -563,7 +569,7 @@ wolfport.bindTooltip("9", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 wolfport.bindPopup(`
@@ -577,7 +583,7 @@ boltwick.bindTooltip("10", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 boltwick.bindPopup(`
@@ -591,7 +597,7 @@ thalantir.bindTooltip("12", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 thalantir.bindPopup(`
@@ -605,7 +611,7 @@ davorok.bindTooltip("11", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 davorok.bindPopup(`
@@ -619,7 +625,7 @@ sunderwatch.bindTooltip("14", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 sunderwatch.bindPopup(`
@@ -632,7 +638,7 @@ stonehold.bindTooltip("15", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 stonehold.bindPopup(`
@@ -646,7 +652,7 @@ gladeforge.bindTooltip("13", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 gladeforge.bindPopup(`
@@ -660,7 +666,7 @@ hearthwell.bindTooltip("17", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 hearthwell.bindPopup(`
@@ -674,7 +680,7 @@ coppershore.bindTooltip("18", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 coppershore.bindPopup(`
@@ -688,7 +694,7 @@ razamir.bindTooltip("20", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 razamir.bindPopup(`
@@ -702,7 +708,7 @@ dunelight.bindTooltip("19", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 dunelight.bindPopup(`
@@ -716,7 +722,7 @@ sunmarkcross.bindTooltip("21", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 sunmarkcross.bindPopup(`
@@ -730,7 +736,7 @@ coralspire.bindTooltip("22", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 coralspire.bindPopup(`
@@ -744,7 +750,7 @@ spearwindhold.bindTooltip("24", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 spearwindhold.bindPopup(`
@@ -758,7 +764,7 @@ horizonsrest.bindTooltip("25", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 horizonsrest.bindPopup(`
@@ -772,7 +778,7 @@ bellorosa.bindTooltip("27", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 bellorosa.bindPopup(`
@@ -786,7 +792,7 @@ tidefall.bindTooltip("23", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 tidefall.bindPopup(`
@@ -800,7 +806,7 @@ saltcrown.bindTooltip("26", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 saltcrown.bindPopup(`
@@ -814,7 +820,7 @@ uni.bindTooltip("16", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 uni.bindPopup(`
@@ -828,7 +834,7 @@ bridge.bindTooltip("4", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 bridge.bindPopup(`
@@ -841,7 +847,7 @@ volc.bindTooltip("28", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
-  className: "number-marker-label"
+  className: "marker-label"
 });
 
 volc.bindPopup(`
@@ -867,9 +873,13 @@ map.on('click', function(e) {
 
 
 
-document.getElementById('legendToggle').addEventListener('click',()=>{
- document.getElementById('legend').classList.toggle('open');
+document.querySelectorAll('.marker-label').forEach(el=>{
+  el.classList.add('number-marker');
 });
+const t=document.getElementById('legendToggle');
+if(t){
+ t.addEventListener('click',()=>document.getElementById('legend').classList.toggle('open'));
+}
 
 </script>
 
