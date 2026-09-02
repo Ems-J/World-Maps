@@ -1,0 +1,1121 @@
+<head>
+  <title>Coppershore Map</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+  <link rel="stylesheet"
+    href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+  <style>
+
+    .leaflet-top.leaflet-left {
+      top: 140px;
+    }
+
+    body {
+      margin: 0;
+      overflow: hidden;
+    }
+
+    #map {
+      height: 100vh;
+      height: 100dvh;
+      width: 100vw;
+      background: black;
+    }
+
+    .leaflet-container {
+      z-index: 1;
+    }
+
+    #backButton {
+
+      position: absolute;
+      top: 20px;
+      left: 20px;
+
+      z-index: 3000;
+
+      padding: 12px 18px;
+
+      background: #2d2418;
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      text-decoration: none;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+    }
+
+    #loreButton {
+
+      position: absolute;
+
+      top: 80px;
+      left: 20px;
+
+      z-index: 3000;
+
+      padding: 12px 18px;
+
+      background: #2d2418;
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      cursor: pointer;
+
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+
+    }
+
+    #legend {
+
+      position: absolute;
+
+      top: 20px;
+      right: 20px;
+
+      z-index: 2000;
+
+      width: 260px;
+
+      padding: 12px;
+
+      background-color: rgba(28,22,16,0.92);
+
+      border: 2px solid #8d6b3f;
+      border-radius: 8px;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.65);
+
+      max-height: 85vh;
+
+      overflow-y: auto;
+
+    }
+
+    #legend h2 {
+
+      margin: 0 0 10px 0;
+
+      color: #d8c08d;
+
+      font-size: 16px;
+
+      border-bottom: 1px solid rgba(216,192,141,0.35);
+
+      padding-bottom: 6px;
+
+    }
+
+    .legend-item {
+
+      display: flex;
+
+      align-items: center;
+
+      margin-bottom: 6px;
+
+      font-size: 13px;
+
+    }
+
+    .legend-number {
+
+      width: 18px;
+      height: 18px;
+
+      margin-right: 8px;
+
+      border-radius: 50%;
+
+      background-color: #8d6b3f;
+
+      display: flex;
+
+      align-items: center;
+      justify-content: center;
+
+      font-size: 11px;
+      font-weight: bold;
+
+      color: #fff8e7;
+
+      flex-shrink: 0;
+
+    }
+
+    .marker-label {
+
+      background: rgba(35,28,20,0.95);
+
+      border: 2px solid #8d6b3f;
+      border-radius: 6px;
+
+      color: #f0e6c8;
+
+      font-family: serif;
+      font-size: 12px;
+      font-weight: bold;
+
+      padding: 2px 6px;
+
+      box-shadow: 0 0 8px rgba(0,0,0,0.5);
+
+      text-align: center;
+
+    }
+
+    .leaflet-tooltip.marker-label {
+
+      background: rgba(35,28,20,0.95);
+
+      border: 2px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+    }
+
+    .leaflet-popup-content-wrapper {
+
+      background: rgba(28,22,16,0.96);
+
+      color: #f0e6c8;
+
+      border: 2px solid #8d6b3f;
+      border-radius: 10px;
+
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+
+      font-family: Georgia, serif;
+
+    }
+
+    .leaflet-popup-content {
+
+      margin: 14px 16px;
+
+      font-size: 14px;
+
+      line-height: 1.5;
+
+    }
+
+    .leaflet-popup-content b {
+
+      color: #d8c08d;
+
+      font-size: 16px;
+
+    }
+
+    .leaflet-popup-tip {
+      background: rgba(28,22,16,0.96);
+    }
+
+    #lorePanel {
+
+      position: absolute;
+
+      top: 0;
+      right: -420px;
+
+      width: 400px;
+      height: 100vh;
+
+      background: #18120c;
+
+      border-left: 2px solid #8d6b3f;
+
+      z-index: 5000;
+
+      transition: right 0.35s ease;
+
+      overflow-y: auto;
+
+      color: #f0e6c8;
+
+      font-family: Georgia, serif;
+
+      box-shadow: 0 0 30px rgba(0,0,0,0.7);
+
+    }
+
+    #lorePanel.open {
+      right: 0;
+    }
+
+    #loreHeader {
+
+      display: flex;
+
+      justify-content: space-between;
+      align-items: center;
+
+      padding: 18px;
+
+      border-bottom:
+        1px solid rgba(216,192,141,0.25);
+
+    }
+
+    #loreHeader h2 {
+
+      margin: 0;
+
+      color: #d8c08d;
+
+    }
+
+    #closeLore {
+
+      background: none;
+
+      border: none;
+
+      color: #d8c08d;
+
+      font-size: 28px;
+
+      cursor: pointer;
+
+    }
+
+    #loreTabs {
+
+      display: flex;
+
+      flex-wrap: wrap;
+
+      justify-content: center;
+
+      align-items: center;
+
+      gap: 12px;
+
+      padding: 14px 18px;
+
+    }
+
+    .loreTab {
+
+      background: rgba(45,36,24,0.95);
+
+      border: 1px solid #8d6b3f;
+
+      color: #f0e6c8;
+
+      padding: 8px 12px;
+
+      cursor: pointer;
+
+      font-family: Georgia, serif;
+
+    }
+
+    .loreTab.active {
+
+      background: #8d6b3f;
+
+      color: #fff8e7;
+
+    }
+
+    .loreContent {
+
+      display: none;
+
+      padding: 20px;
+
+      line-height: 1.7;
+
+    }
+
+    .loreContent.active {
+      display: block;
+    }
+
+    .loreContent h3 {
+
+      color: #d8c08d;
+
+      border-bottom:
+        1px solid rgba(216,192,141,0.2);
+
+      padding-bottom: 4px;
+
+    }
+
+    .map-label {
+
+      color: #d6e8ff;
+
+      font-family: Georgia, serif;
+
+      font-size: 20px;
+
+      font-style: italic;
+
+      text-shadow:
+        0 0 4px rgba(0,0,0,0.8),
+        0 0 10px rgba(0,0,0,0.7);
+
+      white-space: nowrap;
+
+      pointer-events: none;
+
+    }
+
+    .leaflet-tooltip-top:before,
+    .leaflet-tooltip-bottom:before,
+    .leaflet-tooltip-left:before,
+    .leaflet-tooltip-right:before {
+      display: none !important;
+    }
+
+
+    /* ===== MOBILE / TABLET ===== */
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+
+    @media (max-width: 700px) {
+
+      /* Keep the Leaflet controls clear of the top buttons. */
+      .leaflet-top.leaflet-left {
+        top: 118px;
+        left: 10px;
+      }
+
+      .leaflet-control-zoom a {
+        width: 42px;
+        height: 42px;
+        line-height: 42px;
+        font-size: 24px;
+      }
+
+      /* Top navigation buttons */
+      #backButton,
+      #loreButton {
+        left: 10px;
+        padding: 9px 12px;
+        font-size: 14px;
+        min-height: 42px;
+        box-sizing: border-box;
+      }
+
+      #backButton {
+        top: 10px;
+      }
+
+      #loreButton {
+        top: 62px;
+      }
+
+      /* Legend: fit the phone without covering most of the map. */
+      #legend {
+        top: 10px;
+        right: 10px;
+        width: min(220px, calc(100vw - 20px));
+        max-height: 42vh;
+        padding: 10px;
+        box-sizing: border-box;
+        font-size: 12px;
+      }
+
+      #legend h2 {
+        font-size: 15px;
+        margin-bottom: 8px;
+      }
+
+      .legend-item {
+        margin-bottom: 5px;
+        font-size: 12px;
+      }
+
+      .legend-number {
+        width: 20px;
+        height: 20px;
+        margin-right: 7px;
+        font-size: 10px;
+      }
+
+      /* Place the lore drawer over the map rather than making it wider
+         than the phone viewport. */
+      #lorePanel {
+        width: min(420px, 100vw);
+        right: min(-420px, -100vw);
+        box-sizing: border-box;
+      }
+
+      #lorePanel.open {
+        right: 0;
+      }
+
+      #loreHeader {
+        padding: 14px;
+        min-height: 54px;
+        box-sizing: border-box;
+      }
+
+      #loreHeader h2 {
+        font-size: 20px;
+      }
+
+      #closeLore {
+        min-width: 44px;
+        min-height: 44px;
+        padding: 0;
+        font-size: 30px;
+      }
+
+      #loreTabs {
+        gap: 7px;
+        padding: 10px;
+        justify-content: flex-start;
+      }
+
+      .loreTab {
+        padding: 9px 11px;
+        min-height: 40px;
+        font-size: 13px;
+        flex: 0 0 auto;
+      }
+
+      .loreContent {
+        padding: 14px;
+        font-size: 15px;
+        line-height: 1.6;
+      }
+
+      .loreContent h3 {
+        font-size: 18px;
+      }
+
+      /* Map labels should not become huge on a small screen. */
+      .map-label {
+        font-size: 14px;
+      }
+
+      .marker-label {
+        font-size: 11px;
+        padding: 3px 6px;
+      }
+
+      .leaflet-popup-content {
+        margin: 11px 13px;
+        font-size: 14px;
+        line-height: 1.45;
+        max-width: calc(100vw - 70px);
+      }
+
+      .leaflet-popup-content b {
+        font-size: 15px;
+      }
+
+      /* Give the map some breathing room around the phone's safe areas. */
+      #backButton,
+      #loreButton,
+      #legend {
+        margin-top: env(safe-area-inset-top);
+      }
+
+    }
+
+    @media (max-width: 420px) {
+
+      #backButton,
+      #loreButton {
+        font-size: 13px;
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      #legend {
+        width: min(190px, calc(100vw - 20px));
+        max-height: 36vh;
+      }
+
+      .legend-item {
+        font-size: 11px;
+      }
+
+      .map-label {
+        font-size: 12px;
+      }
+
+    }
+
+    /* Landscape phones have very little vertical space. */
+    @media (max-width: 900px) and (orientation: landscape) {
+
+      .leaflet-top.leaflet-left {
+        top: 64px;
+      }
+
+      #backButton,
+      #loreButton {
+        top: 8px;
+      }
+
+      #loreButton {
+        left: 145px;
+      }
+
+      #legend {
+        max-height: 70vh;
+      }
+
+      #lorePanel {
+        width: min(400px, 85vw);
+      }
+
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+<a href="index.html" id="backButton">
+  ← Back to World Map
+</a>
+
+
+
+
+<div id="lorePanel">
+
+  <div id="loreHeader">
+
+
+<h2>Coppershore</h2>
+
+<button id="closeLore"
+  onclick="toggleLorePanel()">
+  ×
+</button>
+
+
+  </div>
+
+  <div id="loreTabs">
+
+
+<button class="loreTab active"
+  onclick="openLoreTab(event, 'overview')">
+  Overview
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'description')">
+  Description
+</button>
+
+<button class="loreTab"
+  onclick="openLoreTab(event, 'politics')">
+  Politics
+</button>
+
+
+  </div>
+
+  <div class="loreContent active" id="overview">
+
+
+<h3>Kingdom</h3>
+<p>Heartlands</p>
+
+<h3>Symbol</h3>
+<p>Tree</p>
+
+<h3>Trade</h3>
+
+<p>
+a
+</p>
+
+
+  </div>
+
+  <div class="loreContent" id="description">
+
+
+<h3>Description</h3>
+
+<p>
+a
+</p>
+
+
+  </div>
+
+  <div class="loreContent" id="politics">
+
+
+<h3>Rulers</h3>
+
+<p>
+
+	a
+
+
+
+  </div>
+
+  <div class="loreContent" id="culture">
+
+
+<h3>Culture & Traditions</h3>
+
+<p>
+a
+
+</p>
+
+
+  </div>
+
+  <div class="loreContent" id="history">
+
+
+<h3>History</h3>
+
+a
+a
+<h3>Legends</h3>
+a
+
+
+
+</p>
+
+
+  </div>
+
+  <div class="loreContent" id="landmarks">
+
+
+<h3>Nearby Landmarks</h3>
+
+a
+
+</p>
+
+
+  </div>
+
+</div>
+
+<div id="map"></div>
+
+
+<script>
+  /*
+   * Load Leaflet before any map code runs.
+   * Some mobile browsers/networks can fail to reach one CDN, so try a fallback.
+   */
+  window.leafletReady = new Promise((resolve, reject) => {
+    const sources = [
+      "https://unpkg.com/leaflet/dist/leaflet.js",
+      "https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.js"
+    ];
+
+    let index = 0;
+
+    function loadNext() {
+      if (index >= sources.length) {
+        reject(new Error("Leaflet could not be loaded from either CDN."));
+        return;
+      }
+
+      const script = document.createElement("script");
+      script.src = sources[index++];
+      script.onload = () => resolve();
+      script.onerror = loadNext;
+      document.head.appendChild(script);
+    }
+
+    loadNext();
+  });
+</script>
+
+
+<script>
+
+window.leafletReady.then(() => {
+
+const map = L.map('map', {
+  crs: L.CRS.Simple,
+  minZoom: 0
+});
+
+const bounds = [[0,0], [1024,1536]];
+
+
+  /* Helpful diagnostics for mobile hosting/file-path problems. */
+  ["coppershore.png", "shield.png"].forEach((asset) => {
+    const test = new Image();
+    test.onload = () => console.log(`${asset} loaded successfully.`);
+    test.onerror = () => console.error(`Missing or inaccessible asset: ${asset}`);
+    test.src = asset;
+  });
+
+L.imageOverlay('coppershore.png', bounds).addTo(map);
+
+map.fitBounds(bounds);
+
+const shieldIcon = L.icon({
+
+  iconUrl: 'shield.png',
+
+  iconSize: [20,20],
+
+  iconAnchor: [10,10],
+
+  popupAnchor: [0,-20]
+
+});
+
+function createMarker(number, coords, title, desc) {
+
+  const marker = L.marker(coords, {
+    icon: shieldIcon
+  }).addTo(map);
+
+  marker.bindTooltip(number.toString(), {
+
+    permanent: true,
+
+    direction: "center",
+
+    className: "marker-label"
+
+  });
+
+  marker.bindPopup(`
+    <b>${title}</b>
+  `);
+
+}
+
+const mapLabels = [];
+
+function createMapLabel(text, coords, rotation, zoomLevel = 2) {
+
+  const label = L.marker(coords, {
+
+    interactive: false,
+
+    icon: L.divIcon({
+
+      className: 'map-label',
+
+      html: `
+        <div style="transform: rotate(${rotation}deg);">
+          ${text}
+        </div>
+      `,
+
+      iconSize: [220,30]
+
+    })
+
+  });
+
+  label.minZoom = zoomLevel;
+
+  mapLabels.push(label);
+
+}
+
+function updateMapLabels() {
+
+  mapLabels.forEach(label => {
+
+    if (map.getZoom() >= label.minZoom) {
+
+      if (!map.hasLayer(label)) {
+        label.addTo(map);
+      }
+
+    } else {
+
+      if (map.hasLayer(label)) {
+        map.removeLayer(label);
+      }
+
+    }
+
+  });
+
+}
+
+map.on('zoomend', updateMapLabels);
+
+updateMapLabels();
+
+/* ===== MARKERS ===== */
+
+
+
+createMarker(1, [375,1344],
+  "River Temple"
+);
+createMarker(2, [176,1241],
+  "Scented Grove"
+);
+createMarker(3, [193,1023],
+  "Canal Gardens"
+);
+createMarker(4, [270,877],
+  "Palm Terraces"
+);
+createMarker(5, [59,711],
+  "The Ascendant Court"
+);
+
+createMarker(6, [104,441],
+  "Vaskiri Hold"
+);
+createMarker(7, [218,299],
+  "Southbank Freys"
+);
+createMarker(8, [407,506],
+  "Flareward"
+);
+createMarker(9, [502,466],
+  "The Shorewarden’s Court"
+);
+createMarker(10, [442,324],
+  "Glasswrights’ Concord Hall"
+);
+createMarker(11, [508,291],
+  "House Aurum"
+);
+createMarker(12, [580,367],
+  "Garrison Shore"
+);
+createMarker(13, [841,411],
+  "Saffron Round"
+);
+createMarker(14, [720,548],
+  "Sunthread Archives"
+);
+createMarker(15, [863,608],
+  "Palace of Dancing Lights"
+);
+createMarker(16, [906,705],
+  "Goldlock District"
+);
+createMarker(17, [769,771],
+  "Quay Tower"
+);
+createMarker(18, [699,720],
+  "Pale Hall"
+);
+
+createMarker(19, [734,820],
+  "Embassy"
+);
+createMarker(20, [600,743],
+  "Prismway"
+);
+
+createMarker(21, [536,724],
+  "Borderstone Bridge"
+);
+createMarker(22, [650,910],
+  "Weighhouse"
+);
+createMarker(23, [823,947],
+  "Jasmine Nook"
+);
+createMarker(24, [821,1038],
+  "Hanging Gardens"
+);
+createMarker(25, [871,1075],
+  "Celestial Gallery"
+);
+createMarker(26, [909,1268],
+  "The Vines"
+);
+createMarker(27, [724,1167],
+  "Cerulean Bloom"
+);
+createMarker(28, [678,1044],
+  "The Blossom Baths"
+);
+createMarker(29, [661,1121],
+  "Honeywalk"
+);
+createMarker(30, [533,1145],
+  "Threadside District"
+);
+createMarker(31, [633,1216],
+  "Tigress Theatre"
+);
+createMarker(32, [680,1342],
+  "The Orchardmills"
+);
+
+/* ===== ZOOM LABELS ===== */
+
+createMapLabel(
+  "Unity Well Memorial",
+  [772,650],
+  0,
+  2
+);
+
+createMapLabel(
+  "Temple Bridge",
+ [410,1397],
+  0,
+  2
+);
+
+createMapLabel(
+  "Hounds Bridge",
+ [582,512],
+  0,
+  2
+);
+
+createMapLabel(
+  "Amber Gate",
+ [276,475],
+  0,
+  2
+);
+
+createMapLabel(
+  "Green Gate",
+ [528,1400],
+  0,
+  2
+);
+
+createMapLabel(
+  "Herder's Park",
+ [607,1415],
+  0,
+  2
+);
+/* ===== COORDINATE FINDER ===== */
+
+map.on('click', function(e) {
+
+  alert(
+    "[" +
+    Math.round(e.latlng.lat) +
+    "," +
+    Math.round(e.latlng.lng) +
+    "]"
+  );
+
+});
+
+/* ===== LORE PANEL ===== */
+
+function toggleLorePanel() {
+
+  document
+    .getElementById('lorePanel')
+    .classList
+    .toggle('open');
+
+}
+
+/* ===== TAB SYSTEM ===== */
+
+function openLoreTab(evt, tabName) {
+
+  const contents =
+    document.getElementsByClassName('loreContent');
+
+  for (let i = 0; i < contents.length; i++) {
+
+    contents[i]
+      .classList
+      .remove('active');
+
+  }
+
+  const tabs =
+    document.getElementsByClassName('loreTab');
+
+  for (let i = 0; i < tabs.length; i++) {
+
+    tabs[i]
+      .classList
+      .remove('active');
+
+  }
+
+  document
+    .getElementById(tabName)
+    .classList
+    .add('active');
+
+  evt.currentTarget
+    .classList
+    .add('active');
+
+}
+
+}).catch((error) => {
+  console.error("Map failed to load:", error);
+
+  const message = document.createElement("div");
+  message.style.cssText = `
+    position: fixed;
+    inset: 20px;
+    z-index: 99999;
+    display: grid;
+    place-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+    background: rgba(24,18,12,0.97);
+    border: 2px solid #8d6b3f;
+    border-radius: 10px;
+    color: #f0e6c8;
+    font-family: Georgia, serif;
+    text-align: center;
+  `;
+
+  message.innerHTML = `
+    <div>
+      <h2 style="color:#d8c08d;">Map couldn't load</h2>
+      <p>Please check your internet connection and reload the page.</p>
+    </div>
+  `;
+
+  document.body.appendChild(message);
+});
+</script>
+
+</body>
+</html>
