@@ -16,6 +16,51 @@
       background: black;
     }
 
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+#map {
+    width: 100%;
+    height: 100%;
+}
+
+
+
+.ring-marker{
+    color:#f3d77d;
+    font-size:28px;
+    text-shadow:0 0 10px gold;
+}
+
+.ring-marker {
+    background: transparent !important;
+    border: none !important;
+}
+
+.ring-marker span {
+    display: block;
+    width: 10px;
+    height: 10px;
+    line-height: 30px;
+    text-align: center;
+
+    color: #f3d77d;
+    font-size: 12px;
+    font-weight: bold;
+
+    text-shadow:
+        0 0 4px #fff,
+        0 0 8px #f3d77d,
+        0 0 14px #f3d77d;
+}
+
+
+
 .marker-label {
   background: rgba(35, 28, 20, 0.95);
 
@@ -48,6 +93,57 @@
 
 }
 
+.small-town-label {
+    color: #f0e6c8;
+    font-family: Georgia, serif;
+    font-size: 12px;
+    font-weight: bold;
+    text-shadow:
+        1px 1px 2px #000,
+       -1px -1px 2px #000,
+        1px -1px 2px #000,
+       -1px 1px 2px #000;
+    white-space: nowrap;
+    background: transparent;
+    border: none;
+}
+
+
+
+#mapToggle {
+
+  position: absolute;
+
+  top: 20px;
+  left: 20px;
+
+  z-index: 1000;
+
+  background: rgba(28,22,16,0.92);
+
+  color: #f0e6c8;
+
+  border: 2px solid #8d6b3f;
+
+  border-radius: 8px;
+
+  padding: 8px 14px;
+
+  font-family: Georgia, serif;
+
+  font-size: 14px;
+
+  cursor: pointer;
+
+  box-shadow: 0 0 10px rgba(0,0,0,.6);
+
+}
+
+#mapToggle:hover{
+
+    background: rgba(55,43,31,.95);
+
+}
 
 #legend {
   position: absolute;
@@ -59,7 +155,9 @@
   width: 170px;
 
   padding: 12px;
+max-height: 70vh;   /* Limits height to 70% of screen */
 
+  overflow-y: auto;   /* Enables vertical scrolling */
   background-color: rgba(28, 22, 16, 0.92);
 
   border: 2px solid #8d6b3f;
@@ -194,114 +292,149 @@
     Northaven
   </div>
 
-  <div class="legend-item">
+<div class="legend-item">
     <span class="legend-number">2</span>
-    Cloudtine
+    Khardruun
   </div>
 
-  <div class="legend-item">
+ <div class="legend-item">
     <span class="legend-number">3</span>
     Wintercourt
   </div>
 
-  <div class="legend-item">
-    <span class="legend-number">4</span>
-    Khardruun
-  </div>
 <div class="legend-item">
-    <span class="legend-number">5</span>
-    Westfront
+    <span class="legend-number">4</span>
+    Dun Varyn
   </div>
+
+  <div class="legend-item">
+    <span class="legend-number">5</span>
+    Cloudtine
+  </div>
+
 <div class="legend-item">
     <span class="legend-number">6</span>
     Spinecrest
   </div>
+ 
 <div class="legend-item">
     <span class="legend-number">7</span>
     Ridgeend
   </div>
+  
 <div class="legend-item">
     <span class="legend-number">8</span>
-    Wolfport
+    Elderglen
   </div>
+
 <div class="legend-item">
     <span class="legend-number">9</span>
-    Boltwick
+    Wolfport
   </div>
+
 <div class="legend-item">
     <span class="legend-number">10</span>
-    Thalan'tir
+    Boltwick
   </div>
+
 <div class="legend-item">
     <span class="legend-number">11</span>
     Davorok
   </div>
+
 <div class="legend-item">
     <span class="legend-number">12</span>
-    Sunderwatch
+    Thalan'tir
   </div>
+
 <div class="legend-item">
     <span class="legend-number">13</span>
-    Stonehold
-  </div>
-<div class="legend-item">
-    <span class="legend-number">14</span>
     Gladeforge
   </div>
+
+<div class="legend-item">
+    <span class="legend-number">14</span>
+    Sunderwatch
+  </div>
+
 <div class="legend-item">
     <span class="legend-number">15</span>
-    Hearthwell
+    Stonehold
   </div>
+
 <div class="legend-item">
     <span class="legend-number">16</span>
-    Coppershore
+    Lysoria
   </div>
+
 <div class="legend-item">
     <span class="legend-number">17</span>
-    Razamir
+    Hearthwell
   </div>
+
 <div class="legend-item">
     <span class="legend-number">18</span>
-    Dunelight
+    Coppershore
   </div>
+
 <div class="legend-item">
     <span class="legend-number">19</span>
-    Sunmark Cross
+    Dunelight
   </div>
+
 <div class="legend-item">
     <span class="legend-number">20</span>
-    Coralspire
+    Razamir
   </div>
+
 <div class="legend-item">
     <span class="legend-number">21</span>
+    Sunmark Cross
+  </div>
+
+<div class="legend-item">
+    <span class="legend-number">22</span>
+    Coralspire
+  </div>
+
+<div class="legend-item">
+    <span class="legend-number">23</span>
+    Tidefall
+  </div>
+
+
+<div class="legend-item">
+    <span class="legend-number">24</span>
     Spearwind Hold
   </div>
 <div class="legend-item">
-    <span class="legend-number">22</span>
+    <span class="legend-number">25</span>
     Horizon's Rest
   </div>
+
 <div class="legend-item">
-    <span class="legend-number">23</span>
-    Bellorosa
-  </div>
-<div class="legend-item">
-    <span class="legend-number">24</span>
-    Tidefall
-  </div>
-<div class="legend-item">
-    <span class="legend-number">25</span>
+    <span class="legend-number">26</span>
     Saltcrown
   </div>
 
+<div class="legend-item">
+    <span class="legend-number">27</span>
+    Bellorosa
+  </div>
 
-
-
+<div class="legend-item">
+    <span class="legend-number">28</span>
+    Tokara
+  </div>
 
 
 </div>
+<button id="mapToggle" onclick="togglePoliticalMap()">
+    Show Borders
+</button>
 
 <div id="map"></div>
-<div id="map"></div>
+
 
 <!-- Leaflet JS -->
 <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -317,8 +450,15 @@
   // Image size
   const bounds = [[0,0], [2288,2349]];
 
-  // Add your image
-  const image = L.imageOverlay('map.jpg', bounds).addTo(map);
+// ===== MAP LAYERS =====
+
+const normalMap = L.imageOverlay('map.jpg', bounds);
+const politicalMap = L.imageOverlay('territories1.png', bounds);
+
+// Start with the normal map
+normalMap.addTo(map);
+
+let showingPolitical = false;
 
   // Fit map to screen
   map.fitBounds(bounds);
@@ -333,6 +473,31 @@ const shieldIcon = L.icon({
   popupAnchor: [0, -20]
 });
 
+
+function togglePoliticalMap() {
+
+    const button = document.getElementById("mapToggle");
+
+    if (showingPolitical) {
+
+        map.removeLayer(politicalMap);
+        normalMap.addTo(map);
+
+        button.innerHTML = "Show Borders";
+
+    } else {
+
+        map.removeLayer(normalMap);
+        politicalMap.addTo(map);
+
+        button.innerHTML = "Hide Borders";
+
+    }
+
+    showingPolitical = !showingPolitical;
+}
+
+
 const northaven = L.marker([1770, 885],{ icon: shieldIcon }).addTo(map);
 northaven.bindTooltip("1", {
   permanent: true,
@@ -346,7 +511,7 @@ northaven.bindPopup(`
 `);
 
 const cloudtine = L.marker([2040, 1320],{ icon: shieldIcon }).addTo(map);
-cloudtine.bindTooltip("2", {
+cloudtine.bindTooltip("5", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -374,7 +539,7 @@ wintercourt.bindPopup(`
 
 
 const khardruun = L.marker([1930, 1040],{ icon: shieldIcon }).addTo(map);
-khardruun.bindTooltip("4", {
+khardruun.bindTooltip("2", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -388,7 +553,7 @@ khardruun.bindPopup(`
 
 
 const westfront = L.marker([1740, 1355],{ icon: shieldIcon }).addTo(map);
-westfront.bindTooltip("5", {
+westfront.bindTooltip("8", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -396,7 +561,7 @@ westfront.bindTooltip("5", {
 });
 
 westfront.bindPopup(`
-  <b>Westfront</b><br>
+  <b>Elderglen</b><br>
   <a href="westfront.html">Open City Map</a>
 `);
 
@@ -430,7 +595,7 @@ ridgeend.bindPopup(`
 
 
 const wolfport = L.marker([1770, 1720],{ icon: shieldIcon }).addTo(map);
-wolfport.bindTooltip("8", {
+wolfport.bindTooltip("9", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -444,7 +609,7 @@ wolfport.bindPopup(`
 
 
 const boltwick = L.marker([1850, 1900],{ icon: shieldIcon }).addTo(map);
-boltwick.bindTooltip("9", {
+boltwick.bindTooltip("10", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -458,7 +623,7 @@ boltwick.bindPopup(`
 
 
 const thalantir = L.marker([1600, 1550],{ icon: shieldIcon }).addTo(map);
-thalantir.bindTooltip("10", {
+thalantir.bindTooltip("12", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -486,7 +651,7 @@ davorok.bindPopup(`
 
 
 const sunderwatch = L.marker([1400, 1440],{ icon: shieldIcon }).addTo(map);
-sunderwatch.bindTooltip("12", {
+sunderwatch.bindTooltip("14", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -499,7 +664,7 @@ sunderwatch.bindPopup(`
 `);
 
 const stonehold = L.marker([1458, 1670],{ icon: shieldIcon }).addTo(map);
-stonehold.bindTooltip("13", {
+stonehold.bindTooltip("15", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -508,12 +673,12 @@ stonehold.bindTooltip("13", {
 
 stonehold.bindPopup(`
   <b>Stonehold</b><br>
-  <a href="Stonehold.html">Open City Map</a>
+  <a href="stonehold.html">Open City Map</a>
 `);
 
 
 const gladeforge = L.marker([1570, 1870],{ icon: shieldIcon }).addTo(map);
-gladeforge.bindTooltip("14", {
+gladeforge.bindTooltip("13", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -527,7 +692,7 @@ gladeforge.bindPopup(`
 
 
 const hearthwell = L.marker([1275, 1715],{ icon: shieldIcon }).addTo(map);
-hearthwell.bindTooltip("15", {
+hearthwell.bindTooltip("17", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -540,8 +705,8 @@ hearthwell.bindPopup(`
 `);
 
 
-const coppershore = L.marker([990, 1750],{ icon: shieldIcon }).addTo(map);
-coppershore.bindTooltip("16", {
+const coppershore = L.marker([972,1753],{ icon: shieldIcon }).addTo(map);
+coppershore.bindTooltip("18", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -555,7 +720,7 @@ coppershore.bindPopup(`
 
 
 const razamir = L.marker([905, 1950],{ icon: shieldIcon }).addTo(map);
-razamir.bindTooltip("17", {
+razamir.bindTooltip("20", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -569,7 +734,7 @@ razamir.bindPopup(`
 
 
 const dunelight = L.marker([960, 1510],{ icon: shieldIcon }).addTo(map);
-dunelight.bindTooltip("18", {
+dunelight.bindTooltip("19", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -583,7 +748,7 @@ dunelight.bindPopup(`
 
 
 const sunmarkcross = L.marker([840, 1700],{ icon: shieldIcon }).addTo(map);
-sunmarkcross.bindTooltip("19", {
+sunmarkcross.bindTooltip("21", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -597,7 +762,7 @@ sunmarkcross.bindPopup(`
 
 
 const coralspire = L.marker([870, 2030],{ icon: shieldIcon }).addTo(map);
-coralspire.bindTooltip("20", {
+coralspire.bindTooltip("22", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -611,7 +776,7 @@ coralspire.bindPopup(`
 
 
 const spearwindhold = L.marker([670, 1690],{ icon: shieldIcon }).addTo(map);
-spearwindhold.bindTooltip("21", {
+spearwindhold.bindTooltip("24", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -625,7 +790,7 @@ spearwindhold.bindPopup(`
 
 
 const horizonsrest = L.marker([690, 1960],{ icon: shieldIcon }).addTo(map);
-horizonsrest.bindTooltip("22", {
+horizonsrest.bindTooltip("25", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -639,7 +804,7 @@ horizonsrest.bindPopup(`
 
 
 const bellorosa = L.marker([330, 1840],{ icon: shieldIcon }).addTo(map);
-bellorosa.bindTooltip("23", {
+bellorosa.bindTooltip("27", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -653,7 +818,7 @@ bellorosa.bindPopup(`
 
 
 const tidefall = L.marker([720, 1350],{ icon: shieldIcon }).addTo(map);
-tidefall.bindTooltip("24", {
+tidefall.bindTooltip("23", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -667,7 +832,7 @@ tidefall.bindPopup(`
 
 
 const saltcrown = L.marker([480, 1310],{ icon: shieldIcon }).addTo(map);
-saltcrown.bindTooltip("25", {
+saltcrown.bindTooltip("26", {
   permanent: true,
   direction: "center",
   offset: [0, -20],
@@ -678,6 +843,229 @@ saltcrown.bindPopup(`
   <b>Saltcrown</b><br>
   <a href="saltcrown.html">Open City Map</a>
 `);
+
+
+const uni = L.marker([1300,1340],{ icon: shieldIcon }).addTo(map);
+uni.bindTooltip("16", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+uni.bindPopup(`
+  <b>Lysoria</b><br>
+  <a href="lysoria.html">Open City Map</a>
+`);
+
+
+const bridge = L.marker([1930,1240],{ icon: shieldIcon }).addTo(map);
+bridge.bindTooltip("4", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+bridge.bindPopup(`
+  <b>Dun Varyn</b><br>
+  <a href="dunvaryn.html">Open City Map</a>
+`);
+
+ const volc = L.marker([540,2140],{ icon: shieldIcon }).addTo(map);
+volc.bindTooltip("28", {
+  permanent: true,
+  direction: "center",
+  offset: [0, -20],
+  className: "marker-label"
+});
+
+volc.bindPopup(`
+  <b>Tokara</b><br>
+  <a href="tokara.html">Open City Map</a>
+`);
+
+
+
+
+
+
+
+
+
+
+/*=============RINGS===========*/
+
+const ringIcon = L.divIcon({
+    className: 'ring-marker',
+    html: '<span>✦</span>',
+    iconSize: [30, 30],
+    iconAnchor: [15, 15]
+});
+
+const dawnmaidenRing = L.marker([421,1991], {
+    icon: ringIcon
+}).addTo(map);
+
+dawnmaidenRing.bindPopup(`
+    <b>Divine Ring of the Dawnmaiden</b>
+`);
+
+const duskfatherRing = L.marker([2076,1288], {
+    icon: ringIcon
+}).addTo(map);
+
+duskfatherRing.bindPopup(`
+    <b>Divine Ring of the Duskfather</b>
+`);
+
+const ladybondsRing = L.marker([1268,1647], {
+    icon: ringIcon
+}).addTo(map);
+
+ladybondsRing.bindPopup(`
+    <b>Divine Ring of the Lady of Bonds</b>
+`);
+
+const shieldbearerRing = L.marker([2026,1811], {
+    icon: ringIcon
+}).addTo(map);
+
+shieldbearerRing.bindPopup(`
+    <b>Divine Ring of the Shieldbearer</b>
+`);
+
+const dreamwrightRing = L.marker([825,1525], {
+    icon: ringIcon
+}).addTo(map);
+
+dreamwrightRing.bindPopup(`
+    <b>Divine Ring of the Dreamwright</b>
+`);
+
+const forgemotherRing = L.marker([1950,828], {
+    icon: ringIcon
+}).addTo(map);
+
+forgemotherRing.bindPopup(`
+    <b>Divine Ring of the Forgemother</b>
+`);
+
+
+
+
+
+
+
+
+
+
+/*=============ZOOMS===========*/
+
+const smallTownLayer = L.layerGroup().addTo(map);
+
+function addSmallTown(name, coords) {
+    L.marker(coords, {
+        interactive: false,
+        icon: L.divIcon({
+            className: "small-town-label",
+            html: name,
+            iconSize: null
+        })
+    }).addTo(smallTownLayer);
+}
+
+smallTownLayer.remove();
+
+map.on("zoomend", function () {
+
+    if (map.getZoom() >= 1) {
+        if (!map.hasLayer(smallTownLayer))
+            smallTownLayer.addTo(map);
+    } else {
+        if (map.hasLayer(smallTownLayer))
+            map.removeLayer(smallTownLayer);
+    }
+
+});
+
+addSmallTown("Trenslough", [1805,741]);
+addSmallTown("Deer Falls", [1821,890]);
+addSmallTown("Alderweal", [1809,1022]);
+addSmallTown("Torrevia", [1627,872]);
+addSmallTown("Ravenglade", [1716,764]);
+addSmallTown("Rillmouth", [1756,1201]);
+addSmallTown("Sylvaris",[1810,1377]);
+addSmallTown("Anrest",[1800,1122]);
+addSmallTown("Gullbreck",[1647,1370]);
+addSmallTown("Herrenhalf",[1542,1413]);
+addSmallTown("Breckspring",[1436,1229]);
+addSmallTown("Crook",[1485,1282]);
+addSmallTown("Foxerley",[1782,1840]);
+addSmallTown("Riveton",[1827,2041]);
+addSmallTown("Badger's Rest",[1731,1990]);
+addSmallTown("Durnfell",[1703,1840]);
+addSmallTown("Harrosshall",[1678,1742]);
+addSmallTown("Coldbrook",[1716,1646]);
+addSmallTown("Velcross",[1760,1574]);
+addSmallTown("Brindell",[1831,1670]);
+addSmallTown("Shiver",[1862,1764]);
+addSmallTown("Strail",[1906,1709]);
+addSmallTown("Riivik",[2038,1776]);
+addSmallTown("Lorenton",[1406,1929]);
+addSmallTown("Rivercross",[1631,2004]);
+addSmallTown("Brightshore",[1509,1967]);
+addSmallTown("Balmere",[1435,1853]);
+addSmallTown("Swanston",[1623,1667]);
+addSmallTown("Durenton",[1467,1538]);
+addSmallTown("Lowfort",[1368,1601]);
+addSmallTown("Tristream",[1546,1660]);
+addSmallTown("Goldbrick",[1409,1683]);
+addSmallTown("Ivylock",[1269,1941]);
+addSmallTown("Farmeadow Hold",[1068,1901]);
+addSmallTown("Turnip",[1185,1605]);
+addSmallTown("Cattail",[1375,1907]);
+addSmallTown("Bytree",[1204,1749]);
+addSmallTown("Houndstooth",[1060,1775]);
+addSmallTown("Eganfort",[989,1671]);
+addSmallTown("Izarin",[946,1833]);
+addSmallTown("Dustvalley",[894,1582]);
+addSmallTown("Cinderrest",[1044,1448]);
+addSmallTown("Mirage",[865,1463]);
+addSmallTown("Sandyburn",[892,1731]);
+addSmallTown("Thasara",[865,1816]);
+addSmallTown("Ekincoe",[763,1658]);
+addSmallTown("Fort Bow",[919,1889]);
+addSmallTown("Aarasa",[841,1902]);
+addSmallTown("Kyestar",[845,1978]);
+addSmallTown("Rovanisk",[2004,1382]);
+addSmallTown("Stelmensk",[2002,1258]);
+addSmallTown("Hail",[2101,1276]);
+addSmallTown("Chielder",[1867,627]);
+addSmallTown("Lonely Ridge",[1948,865]);
+addSmallTown("Halfroost",[1901,941]);
+addSmallTown("Mogrundar",[1942,1118]);
+addSmallTown("Dun Sleit",[1909,1286]);
+addSmallTown("Estrom",[1898,1381]);
+addSmallTown("Senkenlund",[1972,1571]);
+addSmallTown("Yanthiil",[1978,1689]);
+addSmallTown("Pelton",[1878,1644]);
+addSmallTown("Iquito",[440,1645]);
+addSmallTown("Maldorano",[417,1921]);
+addSmallTown("Nayara",[247,1662]);
+addSmallTown("Copaltrai",[329,1422]);
+addSmallTown("Triroad",[621,1864]);
+addSmallTown("Redtide",[800,1982]);
+addSmallTown("Fang",[573,2021]);
+addSmallTown("Myrfen",[1714,1540]);
+addSmallTown("Fenwick",[1576,1510]);
+addSmallTown("St Gonda's Rest",[1655,1652]);
+addSmallTown("Byen",[2063,1113]);
+addSmallTown("Pikers Hold",[2111,1077]);
+addSmallTown("Fensbrek",[2002,977]);
+addSmallTown("Darkgrove",[276,1136]);
+addSmallTown("Tristrem",[512,1469]);
+addSmallTown("Sprangs",[563,1600]);
 
 </script>
 
